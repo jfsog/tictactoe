@@ -35,7 +35,7 @@ int main(void) {
     return EXIT_FAILURE;
   }
   SDL_SetWindowResizable(w, false);
-  game_t game = {.board = {EMPTY}, /// Game start
+  game_t game = {.board = {EMPTY},
                  .player = PLAYER_X,
                  .state = RUNNING_STATE,
                  .whoStarts = true,
