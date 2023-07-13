@@ -1,5 +1,6 @@
 ## Jogo Da Velha
-Classico jogo da velha escrito em C.
+Jogue o clássico jogo da velha e teste suas habilidades contra uma IA!!\
+A inteligência artificial aplica uma heurística baseada nos algorítimos [Minimax] e [Poda Alfa-beta].
 
 ### Como constuir o projeto
 ```sh
@@ -9,8 +10,12 @@ $ cmake ..
 $ make
 
 ```
-Jogar:
+
+## Jogar:
 
 ```sh
 $ ./TicTacToe
 ```
+
+[Minimax]: <https://en.wikipedia.org/wiki/Minimax>
+[Poda Alfa-beta]:<https://en.wikipedia.org/wiki/Alpha-beta_pruning>
