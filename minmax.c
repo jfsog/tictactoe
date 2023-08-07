@@ -25,10 +25,8 @@ tabNode *createNode(tabNode *tab1, short int index) {
 }
 static inline int setedBitCount(Uint l) {
   int c = 0;
-  while (l > 0) {
-    c += (1 & l);
-    l >>= 1;
-  }
+  while (l > 0)
+    c += (1 & l), l >>= 1;
   return c;
 }
 Uint tabToBit(const int *board, int player) {

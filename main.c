@@ -1,6 +1,5 @@
 #include "game.h"
 #include "logica.c"
-#include "minmax.c"
 #include "render.c"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
@@ -40,7 +39,8 @@ int main(void) {
                  .state = RUNNING_STATE,
                  .whoStarts = true,
                  .turn = true,
-                 .gamesPlayed = 0};
+                 .gamesPlayed = 0,
+                 .winningPos = 0};
   limpaTabuleiro(game.board);
   generateMovements();
   SDL_Event e;

@@ -34,4 +34,5 @@ void resetGame(game_t *game) {
   game->whoStarts = !game->whoStarts;
   game->turn = game->whoStarts;
   limpaTabuleiro(game->board);
+  game->winningPos = 0;
 }

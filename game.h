@@ -32,6 +32,7 @@
 // total de partidas que podem ser jogadas
 // jogador e cpu jogam de forma alternada
 #define TOTALPARTIDAS 10
+typedef __uint128_t Uint;
 typedef struct {
   int board[N * N];
   int player;
@@ -39,6 +40,7 @@ typedef struct {
   bool whoStarts;
   bool turn;
   int gamesPlayed;
+  Uint winningPos;
 } game_t;
 typedef struct tabNode {
   int tab[N * N];
@@ -50,6 +52,8 @@ typedef struct tabNode {
   bool visitado;
 } tabNode;
 
-typedef __uint128_t Uint;
 static int PointsToWin = N > DEFGAME ? DEFGAME + (N - DEFGAME) / 2 : N;
+bool checkPlayerWin(const Uint board);
+int checkWins(const int *board, int player);
+Uint tabToBit(const int *board, int player);
 #endif
