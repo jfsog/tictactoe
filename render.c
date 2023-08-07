@@ -2,7 +2,6 @@
 #include "minmax.c"
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_render.h>
-#include <sys/types.h>
 
 const SDL_Color GRID_COLOR = {.r = 255, .g = 255, .b = 255};
 const SDL_Color PLAYER_X_COLOR = {.r = 255, .g = 50, .b = 50};
@@ -72,15 +71,22 @@ Uint getWinningPos(Uint board) {
   return 0;
 }
 Uint highAndLowerBits(Uint wpos) {
-  static int hf = sizeof(wpos) * 4;
-  Uint low = 0;
+  static int hf = 8;
+  int low = 0;
   int i = 0;
   while ((wpos & 1) == 0)
     i++, wpos >>= 1;
   low = i;
   while (wpos > 1)
     i++, wpos >>= 1;
-  return ((Uint)i << hf) | low;
+  if (low % N > i % N) {
+    int t = i;
+    i = low;
+    low = t;
+  }
+  Uint ret = (i / N) << hf | low / N;
+  ret = (ret << hf | i % N) << hf | low % N;
+  return ret;
 }
 void evalVictoryLine(game_t *game, int player) {
   if (game->winningPos == 0) {
@@ -90,20 +96,16 @@ void evalVictoryLine(game_t *game, int player) {
 }
 void render_game_over_state(SDL_Renderer *renderer, const game_t *game,
                             const SDL_Color *color) {
-  static int hf = sizeof(game->winningPos) * 4;
   render_grid(renderer, color);
   render_board(renderer, game->board, color, color);
-  int low = (game->winningPos << hf) >> hf;
-  int hig = game->winningPos >> hf;
-  if (low % N > hig % N) {
-    int t = low;
-    low = hig;
-    hig = t;
-  }
-  int x1 = (low % N) * CELL_WIDTH + CELL_WIDTH * 0.5;
-  int x2 = (hig % N) * CELL_WIDTH + CELL_WIDTH * 0.5;
-  int y1 = (int)(low / N) * CELL_HEIGHT + CELL_HEIGHT * 0.5;
-  int y2 = (int)(hig / N) * CELL_HEIGHT + CELL_HEIGHT * 0.5;
+  static int hf = 8;
+  int I = game->winningPos;
+  if (I == 0)
+    return;
+  int x2 = (I & 0xff) * CELL_WIDTH + CELL_WIDTH * 0.5;
+  int x1 = ((I >> hf) & 0xff) * CELL_WIDTH + CELL_WIDTH * 0.5;
+  int y2 = ((I >> (hf * 2)) & 0xff) * CELL_HEIGHT + CELL_HEIGHT * 0.5;
+  int y1 = ((I >> (hf * 3)) & 0xff) * CELL_HEIGHT + CELL_HEIGHT * 0.5;
   thickLineRGBA(renderer, x1, y1, x2, y2, 20, color->r, color->g, color->b,
                 255);
 }
