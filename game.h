@@ -42,15 +42,15 @@ typedef struct {
   int gamesPlayed;
   Uint winningPos;
 } game_t;
-typedef struct tabNode {
+typedef struct TabNode {
   int tab[N * N];
-  struct tabNode *son;
-  struct tabNode *next;
-  struct tabNode *father;
+  struct TabNode *son;
+  struct TabNode *next;
+  struct TabNode *father;
   int value;
   bool turn;
   bool visitado;
-} tabNode;
+} TabNode;
 
 static int PointsToWin = N > DEFGAME ? DEFGAME + (N - DEFGAME) / 2 : N;
 bool checkPlayerWin(const Uint board);

@@ -6,14 +6,14 @@
 int possibleMovsAmount = 0;
 Uint *arrayPossibleMovs = NULL;
 int possibleFinalMoves(void);
-tabNode *creat_tab(void) {
-  tabNode *novo = calloc(sizeof(tabNode), 1);
+TabNode *creat_tab(void) {
+  TabNode *novo = calloc(1, sizeof(TabNode));
   novo->turn = false;
   return novo;
 }
 int evalGameState(const int *b, bool o_TURN);
-tabNode *createNode(tabNode *tab1, short int index) {
-  tabNode *novo = calloc(sizeof(tabNode), 1);
+TabNode *createNode(TabNode *tab1, short int index) {
+  TabNode *novo = calloc(1, sizeof(TabNode));
   memcpy(novo->tab, tab1->tab, sizeof(int) * (N * N));
   novo->turn = !tab1->turn;
   novo->tab[index] = novo->turn ? PLAYER_O : PLAYER_X;
@@ -127,12 +127,12 @@ int possibleFinalMoves(void) {
 void generateMovements() {
   if (possibleMovsAmount == 0) {
     possibleMovsAmount = possibleFinalMoves();
-    arrayPossibleMovs = calloc(sizeof(Uint), possibleMovsAmount);
+    arrayPossibleMovs = calloc(possibleMovsAmount, sizeof(Uint));
     int idx = 0;
     horizontal_Gen(&idx), vertical_Gen(&idx), diagonal_Gen(&idx);
   }
 }
-void MinMaxAlgorithm(tabNode *pai, tabNode *atual, tabNode **best) {
+void MinMaxAlgorithm(TabNode *pai, TabNode *atual, TabNode **best) {
   if (!pai->visitado) {
     pai->value = atual->value;
     pai->visitado = 1;
@@ -152,8 +152,8 @@ void MinMaxAlgorithm(tabNode *pai, tabNode *atual, tabNode **best) {
     }
   }
 }
-int alfa_beta(tabNode *nodo) {
-  tabNode *p = nodo->father;
+int alfa_beta(TabNode *nodo) {
+  TabNode *p = nodo->father;
   int status = 0;
   while (p != NULL) {
     if (p->visitado) {
@@ -170,7 +170,7 @@ int alfa_beta(tabNode *nodo) {
   return status;
 }
 
-void expandirArvore(tabNode *ptree, int p, int depth, tabNode **best) {
+void expandirArvore(TabNode *ptree, int p, int depth, TabNode **best) {
   if (p < depth) {
     for (int i = 0; i < N * N; i++) {
       if (ptree->tab[i] == EMPTY) {
@@ -185,13 +185,13 @@ void expandirArvore(tabNode *ptree, int p, int depth, tabNode **best) {
     ptree->visitado = true;
   }
 }
-tabNode *buildtree(int *brd, int profun, tabNode **best) {
-  tabNode *ptree = creat_tab();
+TabNode *buildtree(int *brd, int profun, TabNode **best) {
+  TabNode *ptree = creat_tab();
   memcpy(ptree->tab, brd, sizeof(int) * (N * N));
   expandirArvore(ptree, 0, profun, best);
   return ptree;
 }
-void freeTreeOfBoards(tabNode **node) {
+void freeTreeOfBoards(TabNode **node) {
   if (*node) {
     freeTreeOfBoards(&(*node)->son);
     freeTreeOfBoards(&(*node)->next);
@@ -200,7 +200,7 @@ void freeTreeOfBoards(tabNode **node) {
   }
 }
 void nextmove(int *brd, int profun) {
-  tabNode *ptree, *best = NULL;
+  TabNode *ptree, *best = NULL;
   ptree = buildtree(brd, profun, &best);
   memcpy(brd, best->tab, sizeof(int) * (N * N));
   freeTreeOfBoards(&ptree);
